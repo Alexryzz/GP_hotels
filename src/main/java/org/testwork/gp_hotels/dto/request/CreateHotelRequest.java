@@ -1,6 +1,5 @@
 package org.testwork.gp_hotels.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.testwork.gp_hotels.entity.Address;
 import org.testwork.gp_hotels.entity.ArrivalTime;
