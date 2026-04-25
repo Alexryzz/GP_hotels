@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.testwork.gp_hotels.dto.request.CreateHotelRequest;
+import org.testwork.gp_hotels.dto.response.HotelExtendedResponse;
 import org.testwork.gp_hotels.dto.response.HotelResponse;
 import org.testwork.gp_hotels.service.HotelService;
 import java.util.List;
@@ -34,5 +35,11 @@ public class HotelController {
         log.info("get hotels request");
         List<HotelResponse> allHotels = hotelService.getAllHotels();
         return ResponseEntity.ok(allHotels);
+    }
+    @GetMapping("/hotels/{id}")
+    public ResponseEntity<HotelExtendedResponse> getHotel(@PathVariable Long id){
+        log.info("get hotel request");
+        HotelExtendedResponse hotelExtendedResponse = hotelService.getExtendedInfoOfHotel(id);
+        return ResponseEntity.ok(hotelExtendedResponse);
     }
 }

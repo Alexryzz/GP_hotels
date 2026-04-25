@@ -3,8 +3,8 @@ package org.testwork.gp_hotels.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.testwork.gp_hotels.dto.request.CreateHotelRequest;
+import org.testwork.gp_hotels.dto.response.HotelExtendedResponse;
 import org.testwork.gp_hotels.dto.response.HotelResponse;
 import org.testwork.gp_hotels.entity.Hotel;
 import org.testwork.gp_hotels.mapper.HotelMapper;
@@ -38,6 +38,11 @@ public class HotelService {
         log.info("get hotels logic");
         List<Hotel> hotels = hotelRepository.findAll();
         return hotelMapper.toHotelResponseList(hotels);
+    }
+    public HotelExtendedResponse getExtendedInfoOfHotel(Long id) {
+        log.info("get hotel extended logic");
+        Hotel hotel = findHotelById(id);
+        return hotelMapper.toHotelExtendedResponse(hotel);
     }
 
     private Hotel findHotelById(Long id) {

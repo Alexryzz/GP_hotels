@@ -3,6 +3,7 @@ package org.testwork.gp_hotels.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.testwork.gp_hotels.dto.request.CreateHotelRequest;
+import org.testwork.gp_hotels.dto.response.HotelExtendedResponse;
 import org.testwork.gp_hotels.dto.response.HotelResponse;
 import org.testwork.gp_hotels.entity.Hotel;
 
@@ -15,4 +16,6 @@ public interface HotelMapper {
     HotelResponse toHotelResponse(Hotel hotel);
     @Mapping(source = "contact.phone", target = "phone")
     List<HotelResponse> toHotelResponseList(List<Hotel> hotels);
+    @Mapping(source = "amenities", target = "amenities")
+    HotelExtendedResponse toHotelExtendedResponse(Hotel hotel);
 }
