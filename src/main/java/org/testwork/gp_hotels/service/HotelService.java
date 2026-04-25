@@ -34,6 +34,12 @@ public class HotelService {
         hotelRepository.save(hotel);
     }
 
+    public List<HotelResponse> getAllHotels() {
+        log.info("get hotels logic");
+        List<Hotel> hotels = hotelRepository.findAll();
+        return hotelMapper.toHotelResponseList(hotels);
+    }
+
     private Hotel findHotelById(Long id) {
         return hotelRepository.findById(id).orElseThrow(
                 () -> {

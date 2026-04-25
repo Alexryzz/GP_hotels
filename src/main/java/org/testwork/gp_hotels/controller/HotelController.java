@@ -29,4 +29,10 @@ public class HotelController {
         hotelService.addAmenitiesToHotel(id, amenities);
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/hotels")
+    public ResponseEntity<List<HotelResponse>> getAllHotels() {
+        log.info("get hotels request");
+        List<HotelResponse> allHotels = hotelService.getAllHotels();
+        return ResponseEntity.ok(allHotels);
+    }
 }
