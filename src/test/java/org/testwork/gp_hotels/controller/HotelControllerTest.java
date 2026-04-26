@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testwork.gp_hotels.dto.request.CreateHotelRequest;
+import org.testwork.gp_hotels.dto.response.HotelExtendedResponse;
 import org.testwork.gp_hotels.dto.response.HotelResponse;
 import org.testwork.gp_hotels.entity.Address;
 import org.testwork.gp_hotels.entity.ArrivalTime;
@@ -17,6 +18,7 @@ import org.testwork.gp_hotels.service.HotelService;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +28,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @WebMvcTest(HotelController.class)
 class HotelControllerTest {
@@ -115,5 +118,58 @@ class HotelControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(amenities)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAllHotels_ShouldReturnList() throws Exception {
+        HotelResponse response = new HotelResponse();
+        response.setId(1L);
+        response.setName("Test Hotel");
+        response.setPhone("+123");
+
+        Address address = new Address();
+        address.setCity("Minsk");
+        response.setAddress(address);
+
+        List<HotelResponse> responses = List.of(response);
+        when(hotelService.getAllHotels()).thenReturn(responses);
+
+        mockMvc.perform(get("/property-view/hotels"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getHotel_ShouldReturnExtendedResponse() throws Exception {
+        Long id = 1L;
+        HotelExtendedResponse response = new HotelExtendedResponse();
+        when(hotelService.getExtendedInfoOfHotel(id)).thenReturn(response);
+
+        mockMvc.perform(get("/property-view/hotels/{id}", id))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getHotelsByParam_ShouldReturnFiltered() throws Exception {
+        mockMvc.perform(get("/property-view/search")
+                        .param("city", "Minsk"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getHistogramByParam_ShouldReturnMap() throws Exception {
+        Map<String, Long> histogram = Map.of("Hilton", 3L);
+        when(hotelService.getHistogram("brand")).thenReturn(histogram);
+
+        mockMvc.perform(get("/property-view/histogram/brand"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.Hilton").value(3L));
+    }
+
+    @Test
+    void getHistogramByParam_ShouldReturnBadRequest_WhenInvalidParam() throws Exception {
+        when(hotelService.getHistogram("invalid")).thenThrow(new IllegalArgumentException());
+
+        mockMvc.perform(get("/property-view/histogram/invalid"))
+                .andExpect(status().isBadRequest());
     }
 }
