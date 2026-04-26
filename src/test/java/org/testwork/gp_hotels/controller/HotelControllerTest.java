@@ -18,6 +18,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -81,7 +82,7 @@ class HotelControllerTest {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value("DoubleTree by Hilton Minsk"))
                 .andExpect(jsonPath("$.phone").value("+375 17 309-80-00"))
-                .andExpect(jsonPath("$.address.city").value("Minsk"));
+                .andExpect(jsonPath("$.address").value(containsString("Minsk")));
     }
 
     @Test

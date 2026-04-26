@@ -13,7 +13,7 @@ public class HotelExtendedResponse {
     private String description;
     private String brand;
     private Address address;
-    private Contact contact;
+    private Contact contacts;
     private ArrivalTime arrivalTime;
     private List<String> amenities;
 }
