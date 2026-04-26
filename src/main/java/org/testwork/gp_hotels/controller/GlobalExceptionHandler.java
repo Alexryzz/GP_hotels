@@ -45,4 +45,10 @@ public class GlobalExceptionHandler {
         log.warn("No such element - Message: '{}'", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Element not found: " + e.getMessage());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.warn("Illegal argument - Message: '{}'", e.getMessage());
+        return ResponseEntity.badRequest().body("Illegal request argument: " + e.getMessage());
+    }
 }

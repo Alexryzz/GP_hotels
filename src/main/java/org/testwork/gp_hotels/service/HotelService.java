@@ -11,7 +11,9 @@ import org.testwork.gp_hotels.mapper.HotelMapper;
 import org.testwork.gp_hotels.repository.HotelRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +54,23 @@ public class HotelService {
         long size = amenities != null ? amenities.size() : 0;
         List<Hotel> hotels = hotelRepository.search(name, brand, city, country, amenities, size);
         return hotelMapper.toHotelResponseList(hotels);
+    }
+
+    public Map<String, Long> getHistogram(String param) {
+        log.info("get histogram logic");
+        List<Object[]> results = switch (param.toLowerCase()) {
+            case "brand" -> hotelRepository.countByBrand();
+            case "city" -> hotelRepository.countByCity();
+            case "country" -> hotelRepository.countByCountry();
+            case "amenities" -> hotelRepository.countByAmenities();
+            default -> throw new IllegalArgumentException("Invalid histogram parameter: " + param);
+        };
+
+        return results.stream()
+                .collect(Collectors.toMap(
+                        row -> (String) row[0],
+                        row -> (Long) row[1]
+                ));
     }
 
     private Hotel findHotelById(Long id) {

@@ -11,6 +11,7 @@ import org.testwork.gp_hotels.dto.response.HotelResponse;
 import org.testwork.gp_hotels.service.HotelService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/property-view")
@@ -58,5 +59,11 @@ public class HotelController {
         List<HotelResponse> hotelsByParams = hotelService
                 .getHotelsByParams(name, brand, city, country, amenities);
         return ResponseEntity.ok(hotelsByParams);
+    }
+    @GetMapping("/histogram/{param}")
+    public ResponseEntity<Map<String, Long>> getHotelsHistogramByParam(@PathVariable String param) {
+        log.info("get hotels histogram by param request");
+        Map<String, Long> histogram = hotelService.getHistogram(param);
+        return ResponseEntity.ok(histogram);
     }
 }
