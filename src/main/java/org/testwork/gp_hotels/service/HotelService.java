@@ -39,10 +39,19 @@ public class HotelService {
         List<Hotel> hotels = hotelRepository.findAll();
         return hotelMapper.toHotelResponseList(hotels);
     }
+
     public HotelExtendedResponse getExtendedInfoOfHotel(Long id) {
         log.info("get hotel extended logic");
         Hotel hotel = findHotelById(id);
         return hotelMapper.toHotelExtendedResponse(hotel);
+    }
+
+    public List<HotelResponse> getHotelsByParams(String name, String brand, String city,
+                                                 String country, List<String> amenities) {
+        log.info("get hotels by parameters logic");
+        long size = amenities != null ? amenities.size() : 0;
+        List<Hotel> hotels = hotelRepository.search(name, brand, city, country, amenities, size);
+        return hotelMapper.toHotelResponseList(hotels);
     }
 
     private Hotel findHotelById(Long id) {
